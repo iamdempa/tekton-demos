@@ -12,6 +12,19 @@ spec:
     type: string
     description: The git repo URL to clone from.
 
+  - name: repo-revision
+    type: string
+    description: The git repo revision to clone from.
+
+
+  - name: image-reference
+    type: string
+    description: for Kaniko
+  - name: path-to-docker-file
+    type: string
+    description: path to DOCKERFILE for Kaniko     
+
+
   workspaces:
   - name: shared-data
     description: | 
@@ -28,11 +41,19 @@ spec:
     params:
     - name: url
       value: $(params.repo-url)
+    - name: revision
+      value: $(params.repo-revision)
 
-  - name: show-readme
+
+  - name: build-push
     runAfter: ["fetch-source"]
     taskRef:
-      name: show-readme
+      name: kaniko
     workspaces:
     - name: source
       workspace: shared-data
+    params:
+    - name: IMAGE
+      value: $(params.image-reference)
+    - name: DOCKERFILE
+      value: $(params.path-to-docker-file)

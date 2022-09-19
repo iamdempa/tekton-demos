@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: clone-read-run-
+  name: clone-read-run
 spec:
   pipelineRef:
     name: clone-read
@@ -21,3 +21,10 @@ spec:
   params:
   - name: repo-url
     value: https://github.com/iamdempa/tekton-demos.git #git@github.com:tektoncd/website.git
+  - name: repo-revision
+    value: main
+
+  - name: image-reference
+    value: python
+  - name: path-to-docker-file
+    value: /workspace/Dockerfile
