@@ -1,0 +1,60 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: hello1
+spec:
+  steps:
+    - name: echo1
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "Welcome to Pipelines Demo 1"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: hello2
+spec:
+  steps:
+    - name: echo2
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "Welcome to Pipelines Demo 2"
+    
+    - name: build-docker-image
+      image: gcr.io/kaniko-project/executor:v0.17.1
+      env:
+        - name: "DOCKER_CONFIG"
+          value: "/tekton/home/.docker/"
+      command:
+        - /kaniko/executor
+      args:
+        - --destination=gcr.io/my-project/gohelloworld        
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-pipeline
+spec:
+  tasks:
+    - name: hello3
+      taskRef:
+        name: hello3
+
+    - name: hello1
+      taskRef:
+        name: hello1
+    - name: hello2
+      runAfter:
+        - hello1
+      taskRef:
+        name: hello2
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: hello-pipeline-runs
+spec:
+  pipelineRef:
+    name: hello-pipeline

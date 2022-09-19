@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: curl-header-run
+spec:
+  params:
+    - name: url
+      value: "www.google.com"
+    - name: options
+      value:
+       - "-kv"
+  taskRef:
+    name: curl
