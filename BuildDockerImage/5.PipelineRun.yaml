@@ -11,7 +11,7 @@ spec:
     - name: gitRevision
       value: main
     - name: pathToYamlFile
-      value: sources/deployment.yaml
+      value: BuildDockerImage/sources/deployment.yaml
     - name: imageUrl
       value: nginx
     - name: imageTag
@@ -19,6 +19,6 @@ spec:
   # serviceAccountName: pipeline-account
   workspaces:
     - name: git-source
-      emptyDir: {}
-      # persistentVolumeClaim:
-      #   claimName: picalc-source-pvc
+      # emptyDir: {}
+      persistentVolumeClaim:
+        claimName: pvc-claim-2
