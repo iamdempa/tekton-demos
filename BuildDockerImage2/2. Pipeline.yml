@@ -1,35 +1,88 @@
+# apiVersion: tekton.dev/v1beta1
+# kind: Pipeline
+# metadata:
+#   name: clone-read
+# spec:
+
+#   description: | 
+#     This pipeline clones a git repo, then echoes the README file to the stdout.
+
+#   params:
+#   - name: repo-url
+#     type: string
+#     description: The git repo URL to clone from.
+
+#   - name: repo-revision
+#     type: string
+#     description: The git repo revision to clone from.
+
+
+#   - name: image-reference
+#     type: string
+#     description: for Kaniko
+#   - name: context
+#     type: string
+#     description: context
+
+
+#   workspaces:
+#   - name: shared-data
+#     description: | 
+#       This workspace contains the cloned repo files, so they can be read by the
+#       next task.  
+
+#   tasks:
+#   - name: fetch-source
+#     taskRef:
+#       name: git-clone
+#     workspaces:
+#     - name: output
+#       workspace: shared-data
+#     params:
+#     - name: url
+#       value: $(params.repo-url)
+#     - name: revision
+#       value: $(params.repo-revision)
+
+
+#   - name: build-push
+#     runAfter: ["fetch-source"]
+#     taskRef:
+#       name: kaniko
+#     workspaces:
+#     - name: source
+#       workspace: shared-data
+#     params:
+#     - name: IMAGE
+#       value: $(params.image-reference)
+#     - name: CONTEXT
+#       value: $(params.context)
+
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: clone-read
 spec:
-
   description: | 
-    This pipeline clones a git repo, then echoes the README file to the stdout.
-
+    This pipeline clones a git repo, then echoes the README file to the stout.
   params:
   - name: repo-url
     type: string
     description: The git repo URL to clone from.
 
-  - name: repo-revision
-    type: string
-    description: The git repo revision to clone from.
-
-
-  - name: image-reference
+  - name: image-name
     type: string
     description: for Kaniko
-  - name: path-to-docker-file
-    type: string
-    description: path to DOCKERFILE for Kaniko     
 
+  - name: image-path
+    type: string
+    description: path of Dockerfile for Kaniko
 
   workspaces:
   - name: shared-data
     description: | 
       This workspace contains the cloned repo files, so they can be read by the
-      next task.  
+      next task.
 
   tasks:
   - name: fetch-source
@@ -41,9 +94,14 @@ spec:
     params:
     - name: url
       value: $(params.repo-url)
-    - name: revision
-      value: $(params.repo-revision)
 
+  # - name: show-readme
+  #   runAfter: ["fetch-source"]
+  #   taskRef:
+  #     name: show-readme
+  #   workspaces:
+  #   - name: source
+  #     workspace: shared-data
 
   - name: build-push
     runAfter: ["fetch-source"]
@@ -54,6 +112,8 @@ spec:
       workspace: shared-data
     params:
     - name: IMAGE
-      value: $(params.image-reference)
+      value: $(params.image-name)   
     - name: DOCKERFILE
-      value: $(params.path-to-docker-file)
+      value: $(params.image-path)         
+
+      

@@ -1,3 +1,35 @@
+# apiVersion: tekton.dev/v1beta1
+# kind: PipelineRun
+# metadata:
+#   name: clone-read-run
+# spec:
+#   pipelineRef:
+#     name: clone-read
+#   podTemplate:
+#     securityContext:
+#       fsGroup: 65532
+#   workspaces:
+#   - name: shared-data
+#     volumeClaimTemplate:
+#       spec:
+#         accessModes:
+#         - ReadWriteOnce
+#         resources:
+#           requests:
+#             storage: 1Gi
+
+#   params:
+#   - name: repo-url
+#     value: https://github.com/iamdempa/tekton-demos.git #git@github.com:tektoncd/website.git
+#   - name: repo-revision
+#     value: main
+
+#   - name: image-reference
+#     value: python-app
+#   - name: context
+#     value: /workspace/shared-data/BuildDockerImage2
+
+
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
@@ -17,14 +49,15 @@ spec:
         resources:
           requests:
             storage: 1Gi
-
+  # - name: git-credentials
+  #   secret:
+  #     secretName: git-credentials
   params:
   - name: repo-url
-    value: https://github.com/iamdempa/tekton-demos.git #git@github.com:tektoncd/website.git
-  - name: repo-revision
-    value: main
+    value: https://github.com/iamdempa/tekton-demos.git
 
-  - name: image-reference
-    value: python
-  - name: path-to-docker-file
-    value: /workspace/Dockerfile
+  - name: image-name
+    value: "python-test"
+
+  - name: image-path
+    value: $(workspaces.shared-data.path)/BuildDockerImage2/Dockerfile
