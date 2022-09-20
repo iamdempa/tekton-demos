@@ -12,6 +12,7 @@ spec:
     script: | 
       #!/usr/bin/env sh
       cat $(workspaces.source.path)/README.md
+      cat $(workspaces.source.path)/BuildDockerImage2/Dockerfile
       ls -al 
       ls $(workspaces.source.path)/
       cd $(workspaces.source.path)
