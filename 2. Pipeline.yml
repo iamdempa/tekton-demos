@@ -35,16 +35,16 @@ spec:
     - name: url
       value: $(params.repo-url)
 
-  - name: show-readme
-    runAfter: ["fetch-source"]
-    taskRef:
-      name: show-readme
-    workspaces:
-    - name: source
-      workspace: shared-data
+  # - name: show-readme
+  #   runAfter: ["fetch-source"]
+  #   taskRef:
+  #     name: show-readme
+  #   workspaces:
+  #   - name: source
+  #     workspace: shared-data
 
   - name: build-push
-    runAfter: ["show-readme"]
+    runAfter: ["fetch-source"]
     taskRef:
       name: kaniko
     workspaces:
