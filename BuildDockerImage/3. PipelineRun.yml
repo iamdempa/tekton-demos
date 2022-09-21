@@ -28,7 +28,7 @@ spec:
     value: https://github.com/iamdempa/tekton-demos.git
 
   - name: image-name
-    value: "19950818/test:1"
+    value: "index.docker.io/19950818/test:1"
 
   - name: image-context
     value: BuildDockerImage/sources
