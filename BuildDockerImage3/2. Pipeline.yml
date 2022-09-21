@@ -14,9 +14,9 @@ spec:
     type: string
     description: for Kaniko
 
-  # - name: image-path
-  #   type: string
-  #   description: path of Dockerfile for Kaniko
+  - name: image-context
+    type: string
+    description: path of Dockerfile for Kaniko
 
   workspaces:
   - name: shared-data
@@ -53,7 +53,7 @@ spec:
     params:
     - name: IMAGE
       value: $(params.image-name)  
-    # - name: CONTEXT
-    #   value: $(params.image-path)       
+    - name: CONTEXT
+      value: $(params.image-context)       
 
       

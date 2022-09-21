@@ -22,7 +22,7 @@ spec:
     value: https://github.com/iamdempa/tekton-demos.git
 
   - name: image-name
-    value: "python-test:test"
+    value: "python-test:1"
 
-  # - name: image-path
-  #   value: $(workspaces.shared-data.path)/BuildDockerImage2
+  - name: image-context
+    value: BuildDockerImage3/test
