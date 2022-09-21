@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: clone-read
+  name: build-pipeline
 spec:
   description: | 
     This pipeline clones a git repo, then echoes the README file to the stout.
@@ -14,15 +14,18 @@ spec:
     type: string
     description: for Kaniko
 
-  # - name: image-path
-  #   type: string
-  #   description: path of Dockerfile for Kaniko
+  - name: image-context
+    type: string
+    description: path of Dockerfile for Kaniko
 
   workspaces:
   - name: shared-data
     description: | 
       This workspace contains the cloned repo files, so they can be read by the
       next task.
+  - name: docker-credentials
+    description: | 
+      Credentials to authenticate with my Dockerhub account
 
   tasks:
   - name: fetch-source
@@ -35,14 +38,6 @@ spec:
     - name: url
       value: $(params.repo-url)
 
-  # - name: show-readme
-  #   runAfter: ["fetch-source"]
-  #   taskRef:
-  #     name: show-readme
-  #   workspaces:
-  #   - name: source
-  #     workspace: shared-data
-
   - name: build-push
     runAfter: ["fetch-source"]
     taskRef:
@@ -50,10 +45,12 @@ spec:
     workspaces:
     - name: source
       workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials      
     params:
     - name: IMAGE
       value: $(params.image-name)  
-    # - name: CONTEXT
-    #   value: $(params.image-path)       
+    - name: CONTEXT
+      value: $(params.image-context)       
 
       

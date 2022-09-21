@@ -1,13 +1,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: clone-read-run
+  name: build-pipeline-run
 spec:
   pipelineRef:
-    name: clone-read
+    name: build-pipeline
   podTemplate:
     securityContext:
       fsGroup: 65532
+
   workspaces:
   - name: shared-data
     volumeClaimTemplate:
@@ -17,12 +18,17 @@ spec:
         resources:
           requests:
             storage: 1Gi
+
+  - name: docker-credentials
+    secret:
+      secretName: docker-creds
+
   params:
   - name: repo-url
     value: https://github.com/iamdempa/tekton-demos.git
 
   - name: image-name
-    value: "python-test:test"
+    value: "19950818/test:1"
 
-  # - name: image-path
-  #   value: $(workspaces.shared-data.path)/BuildDockerImage2
+  - name: image-context
+    value: BuildDockerImage/sources
